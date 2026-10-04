@@ -1,0 +1,3479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+
+  <title>XO Arena</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #172554 0%, #020617 55%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================
+       HOME
+    ========================= */
+
+    #homeScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .home-card {
+      width: 100%;
+      max-width: 460px;
+      padding: 32px;
+      border-radius: 28px;
+
+      background: rgba(15, 23, 42, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+      backdrop-filter: blur(20px);
+    }
+
+    .logo {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 20px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 24px;
+
+      background:
+        linear-gradient(135deg, #2563eb, #7c3aed);
+
+      font-size: 34px;
+      font-weight: 900;
+
+      box-shadow: 0 15px 35px rgba(37, 99, 235, 0.35);
+    }
+
+    .home-card h1 {
+      text-align: center;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-top: 8px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-label {
+      display: block;
+      margin-bottom: 9px;
+      color: #cbd5e1;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .input {
+      width: 100%;
+      height: 52px;
+      padding: 0 16px;
+
+      border-radius: 14px;
+
+      background: #0f172a;
+      border: 1px solid #334155;
+
+      color: white;
+      outline: none;
+
+      transition: 0.2s;
+    }
+
+    .input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+
+    .input::placeholder {
+      color: #64748b;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      width: 100%;
+      min-height: 52px;
+
+      border: 0;
+      border-radius: 14px;
+
+      font-weight: 800;
+
+      transition:
+        transform 0.15s,
+        opacity 0.15s;
+    }
+
+    .primary-btn {
+      color: white;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.25);
+    }
+
+    .secondary-btn {
+      color: white;
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .primary-btn:active,
+    .secondary-btn:active {
+      transform: scale(0.98);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      margin: 20px 0;
+
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: #334155;
+    }
+
+    .info {
+      margin-top: 20px;
+      padding: 14px;
+
+      border-radius: 14px;
+
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* =========================
+       GAME
+    ========================= */
+
+    #gameScreen {
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+
+      margin-bottom: 16px;
+    }
+
+    .room-card {
+      flex: 1;
+
+      padding: 14px 16px;
+
+      border-radius: 18px;
+
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid #334155;
+    }
+
+    .room-label {
+      font-size: 11px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .room-code {
+      margin-top: 2px;
+
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 3px;
+    }
+
+    .copy-btn {
+      width: 46px;
+      height: 46px;
+
+      border: 1px solid #334155;
+      border-radius: 14px;
+
+      background: #1e293b;
+      color: white;
+
+      font-size: 19px;
+    }
+
+    .players {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+
+      margin-bottom: 16px;
+    }
+
+    .player-card {
+      padding: 16px;
+
+      border-radius: 18px;
+
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid #334155;
+    }
+
+    .player-card.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+    }
+
+    .player-symbol {
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .player-name {
+      margin-top: 3px;
+
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .player-status {
+      margin-top: 8px;
+
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .status-panel {
+      padding: 18px;
+      margin-bottom: 16px;
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(30, 41, 59, 0.95),
+          rgba(15, 23, 42, 0.95)
+        );
+
+      border: 1px solid #334155;
+
+      text-align: center;
+    }
+
+    #turnText {
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    #statusText {
+      margin-top: 5px;
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    /* =========================
+       BOARD
+    ========================= */
+
+    .board {
+      width: min(92vw, 500px);
+      aspect-ratio: 1 / 1;
+
+      margin: 0 auto;
+
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+
+      padding: 10px;
+
+      border-radius: 24px;
+
+      background: #0f172a;
+      border: 1px solid #334155;
+
+      box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.4);
+    }
+
+    .cell {
+      border: 0;
+      border-radius: 18px;
+
+      background: #1e293b;
+
+      color: white;
+
+      font-size: clamp(50px, 15vw, 90px);
+      font-weight: 900;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition:
+        background 0.15s,
+        transform 0.1s;
+    }
+
+    .cell:not(:disabled):hover {
+      background: #273449;
+    }
+
+    .cell:not(:disabled):active {
+      transform: scale(0.95);
+    }
+
+    .cell:disabled {
+      cursor: default;
+    }
+
+    .cell.x {
+      color: #60a5fa;
+    }
+
+    .cell.o {
+      color: #c084fc;
+    }
+
+    .bottom-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+
+      margin-top: 18px;
+    }
+
+    .connection {
+      margin-top: 15px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+
+      color: #64748b;
+      font-size: 12px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+
+    .connection-dot.connected {
+      background: #22c55e;
+    }
+
+    /* =========================
+       MODAL
+    ========================= */
+
+    #resultModal {
+      position: fixed;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(8px);
+
+      z-index: 100;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 390px;
+
+      padding: 30px;
+
+      border-radius: 28px;
+
+      background: #0f172a;
+      border: 1px solid #334155;
+
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+
+      text-align: center;
+    }
+
+    .result-icon {
+      font-size: 64px;
+      margin-bottom: 10px;
+    }
+
+    .modal h2 {
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .modal p {
+      margin-top: 8px;
+      color: #94a3b8;
+    }
+
+    .modal-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
+    #loading {
+      position: fixed;
+      inset: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      background: #020617;
+
+      z-index: 999;
+    }
+
+    .loading-box {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 46px;
+      height: 46px;
+
+      margin: 0 auto 18px;
+
+      border: 4px solid #1e293b;
+      border-top-color: #3b82f6;
+
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    #toast {
+      position: fixed;
+
+      left: 50%;
+      bottom: 25px;
+
+      transform: translate(-50%, 120px);
+
+      width: calc(100% - 40px);
+      max-width: 420px;
+
+      padding: 14px 17px;
+
+      border-radius: 14px;
+
+      background: #1e293b;
+      border: 1px solid #475569;
+
+      color: white;
+
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+
+      z-index: 200;
+
+      opacity: 0;
+
+      transition:
+        transform 0.25s,
+        opacity 0.25s;
+    }
+
+    #toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    #toast.error {
+      border-color: #ef4444;
+    }
+
+    #toast.success {
+      border-color: #22c55e;
+    }
+
+    @media (max-width: 430px) {
+      .home-card {
+        padding: 24px;
+      }
+
+      .home-card h1 {
+        font-size: 30px;
+      }
+
+      .board {
+        gap: 7px;
+        padding: 7px;
+      }
+
+      .cell {
+        border-radius: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       HOME SCREEN
+  ========================== -->
+
+  <section id="homeScreen">
+
+    <div class="home-card">
+
+      <div class="logo">
+        XO
+      </div>
+
+      <h1>XO Arena</h1>
+
+      <p class="subtitle">
+        Play Tic-Tac-Toe with another player in real time.
+      </p>
+
+      <div class="section">
+
+        <button
+          id="createBtn"
+          class="primary-btn"
+          type="button"
+        >
+          Create Game
+        </button>
+
+      </div>
+
+      <div class="divider">
+        OR
+      </div>
+
+      <div>
+
+        <label
+          class="section-label"
+          for="joinCode"
+        >
+          Enter Room Code
+        </label>
+
+        <input
+          id="joinCode"
+          class="input"
+          type="text"
+          maxlength="6"
+          autocomplete="off"
+          autocapitalize="characters"
+          placeholder="Example: A7K92P"
+        />
+
+      </div>
+
+      <div class="section">
+
+        <button
+          id="joinBtn"
+          class="secondary-btn"
+          type="button"
+        >
+          Join Game
+        </button>
+
+      </div>
+
+      <div class="info">
+        Create a room and send the 6-character code to your opponent.
+        The game updates automatically in real time.
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       GAME SCREEN
+  ========================== -->
+
+  <section
+    id="gameScreen"
+    class="hidden"
+  >
+
+    <div class="game-container">
+
+      <div class="top-bar">
+
+        <div class="room-card">
+
+          <div class="room-label">
+            Room
+          </div>
+
+          <div
+            id="roomCodeDisplay"
+            class="room-code"
+          >
+            ------
+          </div>
+
+        </div>
+
+        <button
+          id="copyBtn"
+          class="copy-btn"
+          type="button"
+          aria-label="Copy room code"
+        >
+          ⧉
+        </button>
+
+      </div>
+
+
+      <div class="players">
+
+        <div
+          id="xPlayerCard"
+          class="player-card"
+        >
+
+          <div class="player-symbol">
+            X
+          </div>
+
+          <div
+            id="xPlayerName"
+            class="player-name"
+          >
+            Waiting...
+          </div>
+
+          <div
+            id="xPlayerStatus"
+            class="player-status"
+          >
+            Waiting
+          </div>
+
+        </div>
+
+
+        <div
+          id="oPlayerCard"
+          class="player-card"
+        >
+
+          <div class="player-symbol">
+            O
+          </div>
+
+          <div
+            id="oPlayerName"
+            class="player-name"
+          >
+            Waiting...
+          </div>
+
+          <div
+            id="oPlayerStatus"
+            class="player-status"
+          >
+            Waiting
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="status-panel">
+
+        <div id="turnText">
+          Waiting...
+        </div>
+
+        <div id="statusText">
+          Connecting...
+        </div>
+
+      </div>
+
+
+      <div
+        id="board"
+        class="board"
+      ></div>
+
+
+      <div class="connection">
+
+        <span
+          id="connectionDot"
+          class="connection-dot"
+        ></span>
+
+        <span id="connectionText">
+          Connecting...
+        </span>
+
+      </div>
+
+
+      <div class="bottom-actions">
+
+        <button
+          id="leaveBtn"
+          class="secondary-btn"
+          type="button"
+        >
+          Leave Game
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =========================
+       RESULT MODAL
+  ========================== -->
+
+  <div
+    id="resultModal"
+    class="hidden"
+  >
+
+    <div class="modal">
+
+      <div
+        id="resultIcon"
+        class="result-icon"
+      >
+        🏆
+      </div>
+
+      <h2 id="resultTitle">
+        Game Over
+      </h2>
+
+      <p id="resultMessage">
+        The game has ended.
+      </p>
+
+      <div class="modal-actions">
+
+        <button
+          id="playAgainBtn"
+          class="primary-btn"
+          type="button"
+        >
+          Play Again
+        </button>
+
+        <button
+          id="modalLeaveBtn"
+          class="secondary-btn"
+          type="button"
+        >
+          Leave Game
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       LOADING
+  ========================== -->
+
+  <div
+    id="loading"
+    class="hidden"
+  >
+
+    <div class="loading-box">
+
+      <div class="spinner"></div>
+
+      <div
+        id="loadingText"
+        class="loading-text"
+      >
+        Connecting...
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       TOAST
+  ========================== -->
+
+  <div id="toast"></div>
+
+
+  <!-- =========================
+       FIREBASE
+  ========================== -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    }
+    from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+
+
+    import {
+      getAuth,
+      signInAnonymously
+    }
+    from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+
+
+    import {
+      getDatabase,
+      ref,
+      get,
+      set,
+      update,
+      remove,
+      onValue,
+      onDisconnect,
+      runTransaction,
+      serverTimestamp
+    }
+    from
+      "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+
+    /* =========================================================
+       FIREBASE CONFIG
+    ========================================================= */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyBtJ6eEaapIjzSM9hS69Du9S3oCVYBe1Ac",
+
+      authDomain:
+        "jay-chat-91d02.firebaseapp.com",
+
+      databaseURL:
+        "https://jay-chat-91d02-default-rtdb.firebaseio.com",
+
+      projectId:
+        "jay-chat-91d02",
+
+      storageBucket:
+        "jay-chat-91d02.firebasestorage.app",
+
+      messagingSenderId:
+        "627949387755",
+
+      appId:
+        "1:627949387755:web:07e82c1de88ba1803163ae",
+
+      measurementId:
+        "G-YSC0GR50PK"
+
+    };
+
+
+    /* =========================================================
+       FIREBASE INITIALIZATION
+    ========================================================= */
+
+    const app =
+      initializeApp(firebaseConfig);
+
+    const auth =
+      getAuth(app);
+
+    const db =
+      getDatabase(app);
+
+
+    /* =========================================================
+       DOM HELPERS
+    ========================================================= */
+
+    const $ = (id) =>
+      document.getElementById(id);
+
+
+    const homeScreen =
+      $("homeScreen");
+
+    const gameScreen =
+      $("gameScreen");
+
+    const createBtn =
+      $("createBtn");
+
+    const joinBtn =
+      $("joinBtn");
+
+    const joinCode =
+      $("joinCode");
+
+    const roomCodeDisplay =
+      $("roomCodeDisplay");
+
+    const copyBtn =
+      $("copyBtn");
+
+    const board =
+      $("board");
+
+    const turnText =
+      $("turnText");
+
+    const statusText =
+      $("statusText");
+
+    const connectionText =
+      $("connectionText");
+
+    const connectionDot =
+      $("connectionDot");
+
+    const leaveBtn =
+      $("leaveBtn");
+
+    const modalLeaveBtn =
+      $("modalLeaveBtn");
+
+    const resultModal =
+      $("resultModal");
+
+    const resultIcon =
+      $("resultIcon");
+
+    const resultTitle =
+      $("resultTitle");
+
+    const resultMessage =
+      $("resultMessage");
+
+    const playAgainBtn =
+      $("playAgainBtn");
+
+    const loading =
+      $("loading");
+
+    const loadingText =
+      $("loadingText");
+
+    const toast =
+      $("toast");
+
+
+    const xPlayerCard =
+      $("xPlayerCard");
+
+    const oPlayerCard =
+      $("oPlayerCard");
+
+    const xPlayerName =
+      $("xPlayerName");
+
+    const oPlayerName =
+      $("oPlayerName");
+
+    const xPlayerStatus =
+      $("xPlayerStatus");
+
+    const oPlayerStatus =
+      $("oPlayerStatus");
+
+
+    /* =========================================================
+       STATE
+    ========================================================= */
+
+    let currentUser = null;
+
+    let currentRoom = null;
+
+    let currentPlayer = null;
+
+    let roomUnsubscribe = null;
+
+    let connectedUnsubscribe = null;
+
+    let toastTimer = null;
+
+    let resultShownForRound = null;
+
+    let leaving = false;
+
+
+    /* =========================================================
+       CONSTANTS
+    ========================================================= */
+
+    const AUTH_TIMEOUT =
+      12000;
+
+    const DATABASE_TIMEOUT =
+      12000;
+
+
+    /* =========================================================
+       TIMEOUT HELPER
+    ========================================================= */
+
+    function withTimeout(
+      promise,
+      milliseconds,
+      message = "Request timed out."
+    ) {
+
+      let timeoutId;
+
+      const timeoutPromise =
+        new Promise(
+          (_, reject) => {
+
+            timeoutId =
+              setTimeout(
+                () => {
+
+                  reject(
+                    new Error(message)
+                  );
+
+                },
+                milliseconds
+              );
+
+          }
+        );
+
+
+      return Promise.race([
+        promise,
+        timeoutPromise
+      ])
+      .finally(
+        () => clearTimeout(timeoutId)
+      );
+
+    }
+
+
+    /* =========================================================
+       LOADING
+    ========================================================= */
+
+    function showLoading(message) {
+
+      loadingText.textContent =
+        message || "Loading...";
+
+      loading.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    function hideLoading() {
+
+      loading.classList.add(
+        "hidden"
+      );
+
+    }
+
+
+    /* =========================================================
+       TOAST
+    ========================================================= */
+
+    function showToast(
+      message,
+      type = "normal"
+    ) {
+
+      clearTimeout(toastTimer);
+
+      toast.textContent =
+        message;
+
+      toast.className =
+        "";
+
+      toast.classList.add("show");
+
+      if (
+        type === "error" ||
+        type === "success"
+      ) {
+
+        toast.classList.add(
+          type
+        );
+
+      }
+
+      toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          3500
+        );
+
+    }
+
+
+    /* =========================================================
+       AUTHENTICATION
+    ========================================================= */
+
+    async function authenticate() {
+
+      if (currentUser) {
+
+        return currentUser;
+
+      }
+
+
+      try {
+
+        connectionText.textContent =
+          "Connecting...";
+
+        connectionDot.classList.remove(
+          "connected"
+        );
+
+
+        const result =
+          await withTimeout(
+            signInAnonymously(auth),
+            AUTH_TIMEOUT,
+            "Firebase authentication timed out."
+          );
+
+
+        if (
+          !result ||
+          !result.user
+        ) {
+
+          throw new Error(
+            "Firebase did not return a user."
+          );
+
+        }
+
+
+        currentUser =
+          result.user;
+
+
+        return currentUser;
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "AUTH ERROR:",
+          error
+        );
+
+
+        let message =
+          "Firebase authentication failed.";
+
+
+        if (
+          error &&
+          error.message
+        ) {
+
+          message =
+            error.message;
+
+        }
+
+
+        showToast(
+          message,
+          "error"
+        );
+
+
+        throw error;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       CONNECTION MONITOR
+    ========================================================= */
+
+    function setupConnectionMonitor() {
+
+      if (
+        connectedUnsubscribe
+      ) {
+
+        connectedUnsubscribe();
+
+      }
+
+
+      const connectedRef =
+        ref(db, ".info/connected");
+
+
+      connectedUnsubscribe =
+        onValue(
+          connectedRef,
+          (snapshot) => {
+
+            const connected =
+              snapshot.val() === true;
+
+
+            if (connected) {
+
+              connectionText.textContent =
+                "Connected";
+
+              connectionDot.classList.add(
+                "connected"
+              );
+
+            }
+            else {
+
+              connectionText.textContent =
+                "Offline / reconnecting";
+
+              connectionDot.classList.remove(
+                "connected"
+              );
+
+            }
+
+          },
+          (error) => {
+
+            console.error(
+              "Connection monitor error:",
+              error
+            );
+
+            connectionText.textContent =
+              "Connection error";
+
+            connectionDot.classList.remove(
+              "connected"
+            );
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       ROOM CODE
+    ========================================================= */
+
+    function generateRoomCode() {
+
+      const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+
+      let code = "";
+
+
+      for (
+        let i = 0;
+        i < 6;
+        i++
+      ) {
+
+        code +=
+          characters[
+            Math.floor(
+              Math.random() *
+              characters.length
+            )
+          ];
+
+      }
+
+
+      return code;
+
+    }
+
+
+    /* =========================================================
+       CLEAN ROOM CODE
+    ========================================================= */
+
+    function normalizeRoomCode(value) {
+
+      return String(value || "")
+        .trim()
+        .toUpperCase()
+        .replace(
+          /[^A-Z0-9]/g,
+          ""
+        );
+
+    }
+
+
+    /* =========================================================
+       CREATE ROOM
+    ========================================================= */
+
+    async function createRoom() {
+
+      if (currentRoom) {
+
+        showToast(
+          "You are already in a game.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showLoading(
+        "Creating game..."
+      );
+
+
+      try {
+
+        await authenticate();
+
+
+        let createdRoom = null;
+
+
+        /*
+         * Try several room codes.
+         * Transaction makes room creation
+         * atomic, so two users cannot
+         * accidentally create the same room.
+         */
+
+        for (
+          let attempt = 0;
+          attempt < 10;
+          attempt++
+        ) {
+
+          const code =
+            generateRoomCode();
+
+
+          const roomRef =
+            ref(
+              db,
+              `rooms/${code}`
+            );
+
+
+          const result =
+            await withTimeout(
+              runTransaction(
+                roomRef,
+                (room) => {
+
+                  if (room !== null) {
+
+                    return;
+
+                  }
+
+
+                  return {
+
+                    createdAt:
+                      serverTimestamp(),
+
+                    status:
+                      "waiting",
+
+                    players: {
+
+                      [currentUser.uid]: {
+
+                        symbol:
+                          "X",
+
+                        online:
+                          true,
+
+                        joinedAt:
+                          serverTimestamp()
+
+                      }
+
+                    },
+
+                    game: {
+
+                      board: [
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                      ],
+
+                      turn:
+                        "X",
+
+                      status:
+                        "waiting",
+
+                      winner:
+                        null,
+
+                      round:
+                        1
+
+                    }
+
+                  };
+
+                }
+              ),
+              DATABASE_TIMEOUT,
+              "Creating the room timed out."
+            );
+
+
+          if (
+            result.committed
+          ) {
+
+            createdRoom =
+              code;
+
+            break;
+
+          }
+
+        }
+
+
+        if (!createdRoom) {
+
+          throw new Error(
+            "Could not create a unique room. Please try again."
+          );
+
+        }
+
+
+        currentRoom =
+          createdRoom;
+
+        currentPlayer =
+          "X";
+
+
+        setupConnectionMonitor();
+
+        await setupPresence();
+
+
+        enterGameScreen();
+
+        listenToRoom();
+
+
+        showToast(
+          "Game created. Send the room code to your opponent.",
+          "success"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "CREATE ROOM ERROR:",
+          error
+        );
+
+
+        showToast(
+          friendlyError(error),
+          "error"
+        );
+
+      }
+
+      finally {
+
+        hideLoading();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       JOIN ROOM
+    ========================================================= */
+
+    async function joinRoom() {
+
+      if (currentRoom) {
+
+        showToast(
+          "You are already in a game.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const code =
+        normalizeRoomCode(
+          joinCode.value
+        );
+
+
+      if (
+        code.length !== 6
+      ) {
+
+        showToast(
+          "Enter a valid 6-character room code.",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      showLoading(
+        "Joining game..."
+      );
+
+
+      try {
+
+        await authenticate();
+
+
+        const roomRef =
+          ref(
+            db,
+            `rooms/${code}`
+          );
+
+
+        let assigned =
+          false;
+
+
+        /*
+         * Atomically claim the second
+         * player slot.
+         */
+
+        const result =
+          await withTimeout(
+            runTransaction(
+              roomRef,
+              (room) => {
+
+                if (
+                  room === null
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  !room.players
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  room.players[currentUser.uid]
+                ) {
+
+                  return room;
+
+                }
+
+
+                const players =
+                  room.players;
+
+
+                const playerIds =
+                  Object.keys(players);
+
+
+                if (
+                  playerIds.length >= 2
+                ) {
+
+                  return;
+
+                }
+
+
+                players[currentUser.uid] = {
+
+                  symbol:
+                    "O",
+
+                  online:
+                    true,
+
+                  joinedAt:
+                    serverTimestamp()
+
+                };
+
+
+                if (
+                  room.game
+                ) {
+
+                  room.game.status =
+                    "playing";
+
+                  room.game.turn =
+                    "X";
+
+                }
+
+
+                room.status =
+                  "playing";
+
+
+                return room;
+
+              }
+            ),
+            DATABASE_TIMEOUT,
+            "Joining the room timed out."
+          );
+
+
+        if (
+          !result.committed
+        ) {
+
+          throw new Error(
+            "Room does not exist or is already full."
+          );
+
+        }
+
+
+        assigned = true;
+
+
+        if (!assigned) {
+
+          throw new Error(
+            "Could not join the room."
+          );
+
+        }
+
+
+        currentRoom =
+          code;
+
+        currentPlayer =
+          "O";
+
+
+        setupConnectionMonitor();
+
+        await setupPresence();
+
+
+        enterGameScreen();
+
+        listenToRoom();
+
+
+        showToast(
+          "You joined the game.",
+          "success"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "JOIN ROOM ERROR:",
+          error
+        );
+
+
+        showToast(
+          friendlyError(error),
+          "error"
+        );
+
+      }
+
+      finally {
+
+        hideLoading();
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ENTER GAME SCREEN
+    ========================================================= */
+
+    function enterGameScreen() {
+
+      homeScreen.classList.add(
+        "hidden"
+      );
+
+      gameScreen.classList.remove(
+        "hidden"
+      );
+
+      roomCodeDisplay.textContent =
+        currentRoom;
+
+    }
+
+
+    /* =========================================================
+       PRESENCE
+    ========================================================= */
+
+    async function setupPresence() {
+
+      if (
+        !currentRoom ||
+        !currentUser
+      ) {
+
+        return;
+
+      }
+
+
+      const playerRef =
+        ref(
+          db,
+          `rooms/${currentRoom}/players/${currentUser.uid}`
+        );
+
+
+      try {
+
+        await withTimeout(
+          update(
+            playerRef,
+            {
+              online:
+                true
+            }
+          ),
+          DATABASE_TIMEOUT,
+          "Could not update player status."
+        );
+
+
+        await withTimeout(
+          onDisconnect(playerRef)
+            .update({
+              online:
+                false
+            }),
+          DATABASE_TIMEOUT,
+          "Could not configure disconnect handling."
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "PRESENCE ERROR:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       ROOM LISTENER
+    ========================================================= */
+
+    function listenToRoom() {
+
+      if (
+        roomUnsubscribe
+      ) {
+
+        roomUnsubscribe();
+
+      }
+
+
+      if (
+        !currentRoom
+      ) {
+
+        return;
+
+      }
+
+
+      const roomRef =
+        ref(
+          db,
+          `rooms/${currentRoom}`
+        );
+
+
+      roomUnsubscribe =
+        onValue(
+          roomRef,
+          (snapshot) => {
+
+            const room =
+              snapshot.val();
+
+
+            if (!room) {
+
+              showToast(
+                "The room no longer exists.",
+                "error"
+              );
+
+
+              leaveGame(
+                false
+              );
+
+              return;
+
+            }
+
+
+            renderGame(
+              room
+            );
+
+          },
+          (error) => {
+
+            console.error(
+              "ROOM LISTENER ERROR:",
+              error
+            );
+
+
+            showToast(
+              "Lost connection to the game.",
+              "error"
+            );
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       RENDER GAME
+    ========================================================= */
+
+    function renderGame(room) {
+
+      const game =
+        room.game || {};
+
+
+      const boardState =
+        Array.isArray(game.board)
+          ? game.board
+          : [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ];
+
+
+      renderPlayers(
+        room.players || {}
+      );
+
+
+      board.innerHTML =
+        "";
+
+
+      boardState.forEach(
+        (value, index) => {
+
+          const cell =
+            document.createElement(
+              "button"
+            );
+
+
+          cell.type =
+            "button";
+
+
+          cell.className =
+            "cell";
+
+
+          if (
+            value === "X"
+          ) {
+
+            cell.classList.add(
+              "x"
+            );
+
+          }
+
+
+          if (
+            value === "O"
+          ) {
+
+            cell.classList.add(
+              "o"
+            );
+
+          }
+
+
+          cell.textContent =
+            value;
+
+
+          const gameStatus =
+            game.status;
+
+
+          const canPlay =
+            currentPlayer &&
+            value === "" &&
+            game.turn === currentPlayer &&
+            gameStatus === "playing" &&
+            hasTwoPlayers(
+              room.players || {}
+            );
+
+
+          cell.disabled =
+            !canPlay;
+
+
+          cell.addEventListener(
+            "click",
+            () => {
+
+              makeMove(
+                index
+              );
+
+            }
+          );
+
+
+          board.appendChild(
+            cell
+          );
+
+        }
+      );
+
+
+      updateGameStatus(
+        game,
+        room.players || {}
+      );
+
+
+      handleResult(
+        game
+      );
+
+    }
+
+
+    /* =========================================================
+       RENDER PLAYERS
+    ========================================================= */
+
+    function renderPlayers(
+      players
+    ) {
+
+      let xPlayer = null;
+      let oPlayer = null;
+
+
+      Object.entries(players)
+        .forEach(
+          ([uid, player]) => {
+
+            if (
+              player.symbol === "X"
+            ) {
+
+              xPlayer = {
+                uid,
+                ...player
+              };
+
+            }
+
+
+            if (
+              player.symbol === "O"
+            ) {
+
+              oPlayer = {
+                uid,
+                ...player
+              };
+
+            }
+
+          }
+        );
+
+
+      if (xPlayer) {
+
+        xPlayerName.textContent =
+          xPlayer.uid === currentUser?.uid
+            ? "You"
+            : "Player X";
+
+        xPlayerStatus.textContent =
+          xPlayer.online
+            ? "Online"
+            : "Offline";
+
+        xPlayerCard.classList.toggle(
+          "active",
+          currentPlayer === "X"
+        );
+
+      }
+      else {
+
+        xPlayerName.textContent =
+          "Waiting...";
+
+        xPlayerStatus.textContent =
+          "Waiting";
+
+        xPlayerCard.classList.remove(
+          "active"
+        );
+
+      }
+
+
+      if (oPlayer) {
+
+        oPlayerName.textContent =
+          oPlayer.uid === currentUser?.uid
+            ? "You"
+            : "Player O";
+
+        oPlayerStatus.textContent =
+          oPlayer.online
+            ? "Online"
+            : "Offline";
+
+        oPlayerCard.classList.toggle(
+          "active",
+          currentPlayer === "O"
+        );
+
+      }
+      else {
+
+        oPlayerName.textContent =
+          "Waiting...";
+
+        oPlayerStatus.textContent =
+          "Waiting";
+
+        oPlayerCard.classList.remove(
+          "active"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       PLAYER COUNT
+    ========================================================= */
+
+    function hasTwoPlayers(
+      players
+    ) {
+
+      return (
+        Object.keys(players).length >= 2
+      );
+
+    }
+
+
+    /* =========================================================
+       GAME STATUS
+    ========================================================= */
+
+    function updateGameStatus(
+      game,
+      players
+    ) {
+
+      if (
+        !hasTwoPlayers(players)
+      ) {
+
+        turnText.textContent =
+          "Waiting for opponent";
+
+        statusText.textContent =
+          "Send the room code to another player.";
+
+        return;
+
+      }
+
+
+      if (
+        game.status === "playing"
+      ) {
+
+        if (
+          game.turn === currentPlayer
+        ) {
+
+          turnText.textContent =
+            "Your turn";
+
+          statusText.textContent =
+            `You are ${currentPlayer}. Make your move.`;
+
+        }
+        else {
+
+          turnText.textContent =
+            `${game.turn}'s turn`;
+
+          statusText.textContent =
+            "Waiting for your opponent.";
+
+        }
+
+        return;
+
+      }
+
+
+      if (
+        game.status === "won"
+      ) {
+
+        turnText.textContent =
+          `${game.winner} wins`;
+
+        statusText.textContent =
+          "Game over.";
+
+        return;
+
+      }
+
+
+      if (
+        game.status === "draw"
+      ) {
+
+        turnText.textContent =
+          "Draw";
+
+        statusText.textContent =
+          "Nobody won this round.";
+
+        return;
+
+      }
+
+
+      turnText.textContent =
+        "Game ready";
+
+      statusText.textContent =
+        "Waiting...";
+
+    }
+
+
+    /* =========================================================
+       MAKE MOVE
+    ========================================================= */
+
+    async function makeMove(
+      index
+    ) {
+
+      if (
+        !currentRoom ||
+        !currentUser ||
+        !currentPlayer
+      ) {
+
+        return;
+
+      }
+
+
+      const gameRef =
+        ref(
+          db,
+          `rooms/${currentRoom}/game`
+        );
+
+
+      try {
+
+        const result =
+          await withTimeout(
+            runTransaction(
+              gameRef,
+              (game) => {
+
+                if (!game) {
+
+                  return;
+
+                }
+
+
+                if (
+                  game.status !== "playing"
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  game.turn !== currentPlayer
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  !Array.isArray(
+                    game.board
+                  )
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  index < 0 ||
+                  index > 8
+                ) {
+
+                  return;
+
+                }
+
+
+                if (
+                  game.board[index] !== ""
+                ) {
+
+                  return;
+
+                }
+
+
+                game.board[index] =
+                  currentPlayer;
+
+
+                const winner =
+                  calculateWinner(
+                    game.board
+                  );
+
+
+                if (winner) {
+
+                  game.status =
+                    "won";
+
+                  game.winner =
+                    winner;
+
+                }
+                else if (
+                  game.board.every(
+                    cell =>
+                      cell !== ""
+                  )
+                ) {
+
+                  game.status =
+                    "draw";
+
+                  game.winner =
+                    null;
+
+                }
+                else {
+
+                  game.turn =
+                    currentPlayer === "X"
+                      ? "O"
+                      : "X";
+
+                }
+
+
+                return game;
+
+              }
+            ),
+            DATABASE_TIMEOUT,
+            "Move request timed out."
+          );
+
+
+        if (
+          !result.committed
+        ) {
+
+          return;
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "MOVE ERROR:",
+          error
+        );
+
+
+        showToast(
+          friendlyError(error),
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       WIN CHECK
+    ========================================================= */
+
+    function calculateWinner(
+      boardState
+    ) {
+
+      const combinations = [
+
+        [0, 1, 2],
+
+        [3, 4, 5],
+
+        [6, 7, 8],
+
+        [0, 3, 6],
+
+        [1, 4, 7],
+
+        [2, 5, 8],
+
+        [0, 4, 8],
+
+        [2, 4, 6]
+
+      ];
+
+
+      for (
+        const combination of combinations
+      ) {
+
+        const [
+          a,
+          b,
+          c
+        ] =
+          combination;
+
+
+        if (
+          boardState[a] &&
+          boardState[a] === boardState[b] &&
+          boardState[a] === boardState[c]
+        ) {
+
+          return boardState[a];
+
+        }
+
+      }
+
+
+      return null;
+
+    }
+
+
+    /* =========================================================
+       RESULT
+    ========================================================= */
+
+    function handleResult(
+      game
+    ) {
+
+      if (
+        !game ||
+        !game.round
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        game.status !== "won" &&
+        game.status !== "draw"
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        resultShownForRound ===
+        game.round
+      ) {
+
+        return;
+
+      }
+
+
+      resultShownForRound =
+        game.round;
+
+
+      showResult(
+        game
+      );
+
+    }
+
+
+    function showResult(
+      game
+    ) {
+
+      if (
+        game.status === "draw"
+      ) {
+
+        resultIcon.textContent =
+          "🤝";
+
+        resultTitle.textContent =
+          "It's a Draw";
+
+        resultMessage.textContent =
+          "Nobody won this round.";
+
+      }
+      else if (
+        game.winner === currentPlayer
+      ) {
+
+        resultIcon.textContent =
+          "🏆";
+
+        resultTitle.textContent =
+          "You Won!";
+
+        resultMessage.textContent =
+          "Great move. You won this round.";
+
+      }
+      else {
+
+        resultIcon.textContent =
+          "😅";
+
+        resultTitle.textContent =
+          "You Lost";
+
+        resultMessage.textContent =
+          `Player ${game.winner} won this round.`;
+
+      }
+
+
+      resultModal.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    /* =========================================================
+       REMATCH
+    ========================================================= */
+
+    async function rematch() {
+
+      if (
+        !currentRoom ||
+        !currentUser
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        const gameRef =
+          ref(
+            db,
+            `rooms/${currentRoom}/game`
+          );
+
+
+        const result =
+          await withTimeout(
+            runTransaction(
+              gameRef,
+              (game) => {
+
+                if (!game) {
+
+                  return;
+
+                }
+
+
+                if (
+                  game.status !== "won" &&
+                  game.status !== "draw"
+                ) {
+
+                  return;
+
+                }
+
+
+                const nextRound =
+                  Number(
+                    game.round || 1
+                  ) + 1;
+
+
+                return {
+
+                  board: [
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                  ],
+
+                  turn:
+                    "X",
+
+                  status:
+                    "playing",
+
+                  winner:
+                    null,
+
+                  round:
+                    nextRound
+
+                };
+
+              }
+            ),
+            DATABASE_TIMEOUT,
+            "Rematch request timed out."
+          );
+
+
+        if (
+          result.committed
+        ) {
+
+          resultShownForRound =
+            null;
+
+          resultModal.classList.add(
+            "hidden"
+          );
+
+        }
+        else {
+
+          resultModal.classList.add(
+            "hidden"
+          );
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "REMATCH ERROR:",
+          error
+        );
+
+
+        showToast(
+          friendlyError(error),
+          "error"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       COPY ROOM CODE
+    ========================================================= */
+
+    async function copyRoomCode() {
+
+      if (
+        !currentRoom
+      ) {
+
+        return;
+
+      }
+
+
+      try {
+
+        if (
+          navigator.clipboard &&
+          window.isSecureContext
+        ) {
+
+          await navigator.clipboard.writeText(
+            currentRoom
+          );
+
+        }
+        else {
+
+          const textarea =
+            document.createElement(
+              "textarea"
+            );
+
+
+          textarea.value =
+            currentRoom;
+
+
+          textarea.style.position =
+            "fixed";
+
+          textarea.style.opacity =
+            "0";
+
+
+          document.body.appendChild(
+            textarea
+          );
+
+
+          textarea.select();
+
+          document.execCommand(
+            "copy"
+          );
+
+
+          textarea.remove();
+
+        }
+
+
+        showToast(
+          "Room code copied.",
+          "success"
+        );
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "COPY ERROR:",
+          error
+        );
+
+
+        showToast(
+          `Room code: ${currentRoom}`,
+          "success"
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       LEAVE GAME
+    ========================================================= */
+
+    async function leaveGame(
+      askConfirmation = true
+    ) {
+
+      if (
+        leaving
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        !currentRoom ||
+        !currentUser
+      ) {
+
+        resetToHome();
+
+        return;
+
+      }
+
+
+      if (
+        askConfirmation
+      ) {
+
+        const confirmed =
+          window.confirm(
+            "Leave this game?"
+          );
+
+
+        if (!confirmed) {
+
+          return;
+
+        }
+
+      }
+
+
+      leaving = true;
+
+
+      try {
+
+        const roomCode =
+          currentRoom;
+
+
+        const uid =
+          currentUser.uid;
+
+
+        if (
+          roomUnsubscribe
+        ) {
+
+          roomUnsubscribe();
+
+          roomUnsubscribe =
+            null;
+
+        }
+
+
+        if (
+          connectedUnsubscribe
+        ) {
+
+          connectedUnsubscribe();
+
+          connectedUnsubscribe =
+            null;
+
+        }
+
+
+        const roomRef =
+          ref(
+            db,
+            `rooms/${roomCode}`
+          );
+
+
+        const playerRef =
+          ref(
+            db,
+            `rooms/${roomCode}/players/${uid}`
+          );
+
+
+        /*
+         * Remove the player from the room.
+         */
+
+        await withTimeout(
+          remove(playerRef),
+          DATABASE_TIMEOUT,
+          "Leaving the game timed out."
+        );
+
+
+        /*
+         * Check whether anyone remains.
+         */
+
+        const snapshot =
+          await withTimeout(
+            get(roomRef),
+            DATABASE_TIMEOUT,
+            "Checking room timed out."
+          );
+
+
+        if (
+          snapshot.exists()
+        ) {
+
+          const room =
+            snapshot.val();
+
+
+          const players =
+            room.players || {};
+
+
+          const remainingPlayers =
+            Object.keys(players);
+
+
+          /*
+           * If nobody remains,
+           * delete the room.
+           */
+
+          if (
+            remainingPlayers.length === 0
+          ) {
+
+            try {
+
+              await withTimeout(
+                remove(roomRef),
+                DATABASE_TIMEOUT,
+                "Room cleanup timed out."
+              );
+
+            }
+            catch (cleanupError) {
+
+              console.warn(
+                "ROOM CLEANUP ERROR:",
+                cleanupError
+              );
+
+            }
+
+          }
+          else {
+
+            /*
+             * One player remains.
+             * Reset the room to waiting.
+             */
+
+            const remainingUid =
+              remainingPlayers[0];
+
+
+            const remainingPlayer =
+              players[remainingUid];
+
+
+            await withTimeout(
+              update(
+                roomRef,
+                {
+
+                  status:
+                    "waiting",
+
+                  game: {
+
+                    board: [
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      "",
+                      ""
+                    ],
+
+                    turn:
+                      "X",
+
+                    status:
+                      "waiting",
+
+                    winner:
+                      null,
+
+                    round:
+                      Number(
+                        room.game?.round || 1
+                      )
+
+                  }
+
+                }
+              ),
+              DATABASE_TIMEOUT,
+              "Resetting room timed out."
+            );
+
+
+            /*
+             * If the remaining player is O,
+             * make them X because the X slot
+             * is now free.
+             */
+
+            if (
+              remainingPlayer &&
+              remainingPlayer.symbol === "O"
+            ) {
+
+              await withTimeout(
+                update(
+                  ref(
+                    db,
+                    `rooms/${roomCode}/players/${remainingUid}`
+                  ),
+                  {
+                    symbol:
+                      "X"
+                  }
+                ),
+                DATABASE_TIMEOUT,
+                "Updating player slot timed out."
+              );
+
+            }
+
+          }
+
+        }
+
+      }
+
+      catch (error) {
+
+        console.error(
+          "LEAVE ERROR:",
+          error
+        );
+
+        /*
+         * Even if the server cleanup fails,
+         * don't trap the user on the game screen.
+         */
+
+      }
+
+      finally {
+
+        resetToHome();
+
+        leaving = false;
+
+      }
+
+    }
+
+
+    /* =========================================================
+       RESET LOCAL STATE
+    ========================================================= */
+
+    function resetToHome() {
+
+      if (
+        roomUnsubscribe
+      ) {
+
+        roomUnsubscribe();
+
+        roomUnsubscribe =
+          null;
+
+      }
+
+
+      if (
+        connectedUnsubscribe
+      ) {
+
+        connectedUnsubscribe();
+
+        connectedUnsubscribe =
+          null;
+
+      }
+
+
+      currentRoom =
+        null;
+
+      currentPlayer =
+        null;
+
+      resultShownForRound =
+        null;
+
+
+      resultModal.classList.add(
+        "hidden"
+      );
+
+
+      gameScreen.classList.add(
+        "hidden"
+      );
+
+      homeScreen.classList.remove(
+        "hidden"
+      );
+
+
+      board.innerHTML =
+        "";
+
+
+      roomCodeDisplay.textContent =
+        "------";
+
+
+      joinCode.value =
+        "";
+
+
+      connectionText.textContent =
+        "Not connected";
+
+      connectionDot.classList.remove(
+        "connected"
+      );
+
+    }
+
+
+    /* =========================================================
+       FRIENDLY ERRORS
+    ========================================================= */
+
+    function friendlyError(
+      error
+    ) {
+
+      if (!error) {
+
+        return "Something went wrong.";
+
+      }
+
+
+      const code =
+        error.code || "";
+
+
+      const message =
+        error.message || "";
+
+
+      if (
+        code.includes(
+          "auth/operation-not-allowed"
+        )
+      ) {
+
+        return (
+          "Anonymous Authentication is disabled. " +
+          "Enable Anonymous sign-in in Firebase Console."
+        );
+
+      }
+
+
+      if (
+        code.includes(
+          "PERMISSION_DENIED"
+        )
+      ) {
+
+        return (
+          "Firebase Database permission denied. " +
+          "Check your Realtime Database rules."
+        );
+
+      }
+
+
+      if (
+        message.toLowerCase().includes(
+          "timed out"
+        )
+      ) {
+
+        return (
+          "Firebase took too long to respond. " +
+          "Check your internet connection and Firebase settings."
+        );
+
+      }
+
+
+      if (
+        message
+      ) {
+
+        return message;
+
+      }
+
+
+      return "Something went wrong. Please try again.";
+
+    }
+
+
+    /* =========================================================
+       BUTTON EVENTS
+    ========================================================= */
+
+    createBtn.addEventListener(
+      "click",
+      createRoom
+    );
+
+
+    joinBtn.addEventListener(
+      "click",
+      joinRoom
+    );
+
+
+    copyBtn.addEventListener(
+      "click",
+      copyRoomCode
+    );
+
+
+    leaveBtn.addEventListener(
+      "click",
+      () => leaveGame(true)
+    );
+
+
+    modalLeaveBtn.addEventListener(
+      "click",
+      () => {
+
+        resultModal.classList.add(
+          "hidden"
+        );
+
+        leaveGame(true);
+
+      }
+    );
+
+
+    playAgainBtn.addEventListener(
+      "click",
+      rematch
+    );
+
+
+    joinCode.addEventListener(
+      "input",
+      () => {
+
+        joinCode.value =
+          normalizeRoomCode(
+            joinCode.value
+          );
+
+      }
+    );
+
+
+    joinCode.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key === "Enter"
+        ) {
+
+          joinRoom();
+
+        }
+
+      }
+    );
+
+
+    /* =========================================================
+       STARTUP
+       ========================================================= */
+
+    console.log(
+      "XO Arena loaded successfully."
+    );
+
+    console.log(
+      "Firebase authentication will begin when you create or join a game."
+    );
+
+  </script>
+
+</body>
+</html>
